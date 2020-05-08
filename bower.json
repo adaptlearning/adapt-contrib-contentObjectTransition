@@ -1,0 +1,17 @@
+{
+  "name": "adapt-contentObjectTransition",
+  "version": "0.0.1",
+  "framework": ">=5.4.0",
+  "homepage": "https://github.com/olivermartinfoster/adapt-contentObjectTransition",
+  "issues": "https://github.com/olivermartinfoster/adapt-contentObjectTransition/issues/new",
+  "extension" : "contentObjectTransition",
+  "displayName" : "Menu/Page Transition",
+  "description": "An extension which provides a basic feedback overlay for question components",
+  "main": "/js/adapt-contentObjectTransition.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-extension"
+  ],
+  "license": "GPL-3.0",
+  "targetAttribute": "_contentObjectTransition"
+}
