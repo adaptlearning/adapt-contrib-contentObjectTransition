@@ -1,7 +1,7 @@
 {
   "name": "adapt-contentObjectTransition",
   "version": "0.0.1",
-  "framework": ">=5.4.0",
+  "framework": ">=5.4",
   "homepage": "https://github.com/olivermartinfoster/adapt-contentObjectTransition",
   "issues": "https://github.com/olivermartinfoster/adapt-contentObjectTransition/issues/new",
   "extension" : "contentObjectTransition",

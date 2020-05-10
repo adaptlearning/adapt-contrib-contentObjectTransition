@@ -1,10 +1,15 @@
 define([
-  'core/js/adapt'
-],function(Adapt) {
+  'core/js/adapt',
+  'core/js/views/menuView'
+],function(Adapt, MenuView) {
 
   class ContentObjectTransition extends Backbone.Controller {
 
     initialize() {
+      /**
+       * @type {String} Original href to correct IE11
+       */
+      this.href = window.location.href.replace(/#.*/, '');
       /**
        * @type {[ContentObjectView]} Keep a list of all content object views
        */
@@ -49,7 +54,7 @@ define([
     updateHash(location, fragment, replace) {
       // Assume scroll position is always 0 on a new page
       this.lastState = { scroll: 0 };
-      history[replace ? 'replaceState' : 'pushState'](this.lastState, '', '#'+fragment);
+      history[replace ? 'replaceState' : 'pushState'](this.lastState, '', this.href+'#'+fragment);
     }
 
     onScroll() {
@@ -59,8 +64,13 @@ define([
        */
       this.keepScroll = $(window).scrollTop();
       // Save current scroll position for popState restoration
+      let views;
+      if (!(Adapt.parentView instanceof MenuView)) {
+        views = Adapt.parentView.findDescendantViews(true);
+      }
       history.replaceState({
-        scroll: $(window).scrollTop()
+        scroll: $(window).scrollTop(),
+        lowestId: views && views.length && views[views.length-1].model.get('_id') || null
       }, '', window.location.hash);
     }
 
@@ -91,14 +101,8 @@ define([
       this.views.push(contentObjectView);
     }
 
-    onContentObjectViewPreRender(contentObjectView) {
+    async onContentObjectViewPreRender(contentObjectView) {
       if (this.views.length < 1) return;
-
-      if (this.lastState && this.lastState.scroll !== undefined) {
-        // Offset incoming page to match required scroll top
-        const scrollTo = this.lastState.scroll - $('.nav').height();
-        contentObjectView.$el.css('top', -scrollTo);
-      }
 
       const index = this.views.length;
 
@@ -125,6 +129,16 @@ define([
         contentObjectView.$el.addClass('contentobjecttransition__initial__forward');
       } else {
         contentObjectView.$el.addClass('contentobjecttransition__initial__backward');
+      }
+
+      if (this.lastState && this.lastState.scroll !== undefined) {
+        if (this.lastState.lowestId) {
+          await Adapt.parentView.renderTo(this.lastState.lowestId);
+        }
+
+        // Offset incoming page to match required scroll top
+        const scrollTo = this.lastState.scroll - $('.nav').height();
+        contentObjectView.$el.css('top', -scrollTo);
       }
 
     }
