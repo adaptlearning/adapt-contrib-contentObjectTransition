@@ -49,7 +49,8 @@ define([
     updateHash(location, fragment, replace) {
       // Assume scroll position is always 0 on a new page
       this.lastState = { scroll: 0 };
-      history[replace ? 'replaceState' : 'pushState'](this.lastState, '', '#'+fragment);
+      const href = window.location.href.replace(/#.*/, '');
+      history[replace ? 'replaceState' : 'pushState'](this.lastState, '', href+'#'+fragment);
     }
 
     onScroll() {
