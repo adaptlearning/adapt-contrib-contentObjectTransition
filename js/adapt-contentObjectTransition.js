@@ -6,6 +6,10 @@ define([
 
     initialize() {
       /**
+       * @type {String} Original href to correct IE11
+       */
+      this.href = window.location.href.replace(/#.*/, '');
+      /**
        * @type {[ContentObjectView]} Keep a list of all content object views
        */
       this.views = [];
@@ -49,8 +53,7 @@ define([
     updateHash(location, fragment, replace) {
       // Assume scroll position is always 0 on a new page
       this.lastState = { scroll: 0 };
-      const href = window.location.href.replace(/#.*/, '');
-      history[replace ? 'replaceState' : 'pushState'](this.lastState, '', href+'#'+fragment);
+      history[replace ? 'replaceState' : 'pushState'](this.lastState, '', this.href+'#'+fragment);
     }
 
     onScroll() {
