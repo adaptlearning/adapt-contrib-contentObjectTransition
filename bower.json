@@ -6,7 +6,7 @@
   "issues": "https://github.com/olivermartinfoster/adapt-contentObjectTransition/issues/new",
   "extension" : "contentObjectTransition",
   "displayName" : "Menu/Page Transition",
-  "description": "An extension which provides a basic feedback overlay for question components",
+  "description": "An extension which provides a basic animation between pages",
   "main": "/js/adapt-contentObjectTransition.js",
   "keywords": [
     "adapt-plugin",

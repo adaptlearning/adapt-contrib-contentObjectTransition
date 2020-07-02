@@ -1,41 +1,57 @@
-@contentobjecttransition-duration: 0.25s;
-@contentobjecttransition-easing: ease-out;
+@coTransitionDuration: 0.25s;
+@coTransitionEasing: ease-out;
 
 #wrapper {
   overflow-x: hidden !important;
 }
 
-.contentobjecttransition__preremove {
-  transition: transform @contentobjecttransition-duration @contentobjecttransition-easing, opacity @contentobjecttransition-duration @contentobjecttransition-easing;
-  transform: scale(1) rotateZ(0.01deg);
-  opacity: 1 !important;
-}
+.contentobjecttransition {
+  &__preremove {
+    opacity: 1 !important;
+    .transition(transform @coTransitionDuration @coTransitionEasing, opacity @coTransitionDuration @coTransitionEasing;);
+    .transform(scale(1) rotateZ(0.01deg));
+  }
 
-.contentobjecttransition__remove {
-  transform: scale(0.95) rotateZ(0.01deg);
-  opacity: 0 !important;
-}
+  &__remove {
+    opacity: 0 !important;
+    .transform(scale(.95) rotateZ(0.01deg));
+  }
 
-.contentobjecttransition__initial {
-  position: fixed;
-  top: @navigation-height;
-  left: 0;
-  width: 100%;
-  transition: transform @contentobjecttransition-duration @contentobjecttransition-easing;
-  background-color: white;
+  &__initial {
+    position: fixed;
+    top: @navigation-height;
+    left: 0;
+    width: 100%;
+    .transition(transform @coTransitionDuration @coTransitionEasing);
+    background-color: @white;
 
-  &__forward {
-    transform: translateX(100%);
+    .dir-rtl & {
+      left: inherit;
+      right: 0;
+    }
+  }
+
+  &__initial__forward {
+    .transform(translateX(100%));
     transform-origin: top left;
+
+    .dir-rtl & {
+      .transform(translateX(-100%));
+      transform-origin: top right;
+    }
   }
 
-  &__backward {
-    transform: translateX(-100%);
+  &__initial__backward {
+    .transform(translateX(-100%));
     transform-origin: top right;
+
+    .dir-rtl & {
+      .transform(translateX(100%));
+      transform-origin: top left;
+    }
   }
 
-}
-
-.contentobjecttransition__start {
-  transform: none;
+  &__start {
+    transform: none !important;
+  }
 }
