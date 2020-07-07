@@ -17,7 +17,7 @@
                 "_isEnabled": {
                   "type": "boolean",
                   "required": false,
-                  "title": "Enable Menu/Page Transitions",
+                  "title": "Enable Menu/Page Transition",
                   "inputType": "Checkbox",
                   "validators": []
                 }
