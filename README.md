@@ -25,8 +25,8 @@ It provides a basic forward and backward animation between pages and menus.
 No known limitations.
 
 ----------------------------
-**Version number:**  0.1.1   <a href="https://community.adaptlearning.org/" target="_blank"><img src="https://github.com/adaptlearning/documentation/blob/master/04_wiki_assets/plug-ins/images/adapt-logo-mrgn-lft.jpg" alt="adapt learning logo" align="right"></a>  
-**Framework versions:**  5.6+  
+**Version number:**  0.2.0   <a href="https://community.adaptlearning.org/" target="_blank"><img src="https://github.com/adaptlearning/documentation/blob/master/04_wiki_assets/plug-ins/images/adapt-logo-mrgn-lft.jpg" alt="adapt learning logo" align="right"></a>  
+**Framework versions:**  5.8+  
 **Author / maintainer:** Adapt Core Team with [contributors](https://github.com/adaptlearning/adapt-contrib-contentObjectTransition/graphs/contributors)  
 **Accessibility support:** WAI AA  
 **RTL support:** Yes  
