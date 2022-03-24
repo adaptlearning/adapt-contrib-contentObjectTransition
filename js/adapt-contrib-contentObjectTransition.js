@@ -1,4 +1,5 @@
 import Adapt from 'core/js/adapt';
+import wait from 'core/js/wait';
 
 class ContentObjectTransition extends Backbone.Controller {
 
@@ -134,7 +135,7 @@ class ContentObjectTransition extends Backbone.Controller {
     if (index === -1) return;
 
     // Holding loading screen
-    Adapt.wait.begin();
+    wait.begin();
 
     // Add incoming animation event listeners and animation classes
     const incomingContentObject = this.views[index];
@@ -178,7 +179,7 @@ class ContentObjectTransition extends Backbone.Controller {
       incomingContentObject.$el.css('top', '');
 
       // Release loading screen
-      Adapt.wait.end();
+      wait.end();
     });
 
     // Destroy outgoing content object
