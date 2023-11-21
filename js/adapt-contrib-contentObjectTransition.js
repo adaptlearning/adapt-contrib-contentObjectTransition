@@ -16,6 +16,7 @@ class ContentObjectTransition extends Backbone.Controller {
     };
     /** Keep current scroll position to correct IE11 */
     this.keepScroll = false;
+    this.onScroll = _.debounce(this.onScroll, 100);
     _.bindAll(this, 'endAnimation', 'updateHash', 'onScroll', 'onPopState');
     this.listenTo(Adapt, 'app:dataReady', this.onDataReady);
   }
