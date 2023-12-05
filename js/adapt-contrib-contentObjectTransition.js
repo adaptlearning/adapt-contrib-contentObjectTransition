@@ -78,6 +78,14 @@ class ContentObjectTransition extends Backbone.Controller {
 
   setupEventListeners() {
     // Animation event listeners
+
+    this.stopListening(Adapt, {
+      preRemove: this.onPreRemove,
+      'contentObjectView:preRender': this.onContentObjectViewPreRender,
+      'contentObjectView:preReady': this.onContentObjectViewPreReady,
+      'contentObjectView:postRemove': this.onContentObjectViewPostRemove
+    });
+
     this.listenTo(Adapt, {
       preRemove: this.onPreRemove,
       'contentObjectView:preRender': this.onContentObjectViewPreRender,
