@@ -21,8 +21,21 @@ class ContentObjectTransition extends Backbone.Controller {
     this.listenTo(Adapt, 'app:dataReady', this.onDataReady);
   }
 
+  removeEventListeners() {
+    window.removeEventListener('scroll', this.onScroll, { passive: false, capture: true });
+    window.removeEventListener('popstate', this.onPopState, { passive: false, capture: true });
+
+    this.stopListening(Adapt, {
+      preRemove: this.onPreRemove,
+      'contentObjectView:preRender': this.onContentObjectViewPreRender,
+      'contentObjectView:preReady': this.onContentObjectViewPreReady,
+      'contentObjectView:postRemove': this.onContentObjectViewPostRemove
+    });
+  }
+
   onDataReady() {
     const config = Adapt.course.get('_contentObjectTransition');
+    this.removeEventListeners()
     if (!config || !config._isEnabled) return;
     this.setupOverrides();
     this.setupEventListeners();
@@ -40,10 +53,6 @@ class ContentObjectTransition extends Backbone.Controller {
 
     // Prevent scroll restoration when returning to a previous page (not supported in IE11)
     history.scrollRestoration = 'manual';
-
-    // Manually prevent scroll restoration for IE11
-    window.addEventListener('scroll', this.onScroll, { passive: false, capture: true });
-    window.addEventListener('popstate', this.onPopState, { passive: false, capture: true });
   }
 
   updateHash(location, fragment, replace) {
@@ -77,15 +86,11 @@ class ContentObjectTransition extends Backbone.Controller {
   }
 
   setupEventListeners() {
+    // Manually prevent scroll restoration for IE11
+    window.addEventListener('scroll', this.onScroll, { passive: false, capture: true });
+    window.addEventListener('popstate', this.onPopState, { passive: false, capture: true });
+
     // Animation event listeners
-
-    this.stopListening(Adapt, {
-      preRemove: this.onPreRemove,
-      'contentObjectView:preRender': this.onContentObjectViewPreRender,
-      'contentObjectView:preReady': this.onContentObjectViewPreReady,
-      'contentObjectView:postRemove': this.onContentObjectViewPostRemove
-    });
-
     this.listenTo(Adapt, {
       preRemove: this.onPreRemove,
       'contentObjectView:preRender': this.onContentObjectViewPreRender,
