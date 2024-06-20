@@ -5,7 +5,7 @@
     "url": "git://github.com/adaptlearning/adapt-contrib-contentObjectTransition.git"
   },
   "version": "1.0.0",
-  "framework": ">=5.19.1",
+  "framework": ">=5.20.0",
   "homepage": "https://github.com/adaptlearning/adapt-contrib-contentObjectTransition",
   "issues": "https://github.com/adaptlearning/adapt_framework/issues/new",
   "extension": "contentObjectTransition",

@@ -5,7 +5,7 @@ class ContentObjectTransition extends Backbone.Controller {
 
   initialize() {
     /**
-     * href - @type {String} Original href to correct IE11
+     * href - @type {String} Original href
      * views - @type {[ContentObjectView]} Keep a list of all content object views
      * lastState - @type {Object} Keep that last scroll state for post animation restoration
      */
@@ -14,15 +14,23 @@ class ContentObjectTransition extends Backbone.Controller {
     this.lastState = {
       scroll: 0
     };
-    /** Keep current scroll position to correct IE11 */
-    this.keepScroll = false;
-    this.onScroll = _.debounce(this.onScroll, 100);
-    _.bindAll(this, 'endAnimation', 'updateHash', 'onScroll', 'onPopState');
+    _.bindAll(this, 'endAnimation', 'updateHash');
     this.listenTo(Adapt, 'app:dataReady', this.onDataReady);
+  }
+
+  removeEventListeners() {
+
+    this.stopListening(Adapt, {
+      preRemove: this.onPreRemove,
+      'contentObjectView:preRender': this.onContentObjectViewPreRender,
+      'contentObjectView:preReady': this.onContentObjectViewPreReady,
+      'contentObjectView:postRemove': this.onContentObjectViewPostRemove
+    });
   }
 
   onDataReady() {
     const config = Adapt.course.get('_contentObjectTransition');
+    this.removeEventListeners()
     if (!config || !config._isEnabled) return;
     this.setupOverrides();
     this.setupEventListeners();
@@ -38,12 +46,8 @@ class ContentObjectTransition extends Backbone.Controller {
     // Switch to history pushState and replaceState to enable popstate event
     Backbone.history._updateHash = this.updateHash;
 
-    // Prevent scroll restoration when returning to a previous page (not supported in IE11)
+    // Prevent scroll restoration when returning to a previous page
     history.scrollRestoration = 'manual';
-
-    // Manually prevent scroll restoration for IE11
-    window.addEventListener('scroll', this.onScroll, { passive: false, capture: true });
-    window.addEventListener('popstate', this.onPopState, { passive: false, capture: true });
   }
 
   updateHash(location, fragment, replace) {
@@ -52,31 +56,8 @@ class ContentObjectTransition extends Backbone.Controller {
     history[replace ? 'replaceState' : 'pushState'](this.lastState, '', `${this.href}#${fragment}`);
   }
 
-  onScroll() {
-    /**
-     * IE11 doesn't support history.scrollRestoration
-     * We have to keep the current scroll position of the page being removed
-     */
-    this.keepScroll = $(window).scrollTop();
-    // Save current scroll position for popState restoration
-    history.replaceState({
-      scroll: $(window).scrollTop()
-    }, '', window.location.hash);
-  }
-
-  onPopState(e) {
-    // Capture scroll position of page being restored
-    this.lastState = e.state || { scroll: 0 };
-    if (this.keepScroll === false) return;
-    /**
-     * IE11 doesn't support history.scrollRestoration
-     * we have to force the scroll position of the page being removed so that
-     * it doesn't jump up
-     */
-    $(window).scrollTop(this.keepScroll);
-  }
-
   setupEventListeners() {
+
     // Animation event listeners
     this.listenTo(Adapt, {
       preRemove: this.onPreRemove,
@@ -162,7 +143,6 @@ class ContentObjectTransition extends Backbone.Controller {
     incomingContentObject.$el[0].removeEventListener('transitionend', this.endAnimation);
     incomingContentObject.$el[0].removeEventListener('animationend', this.endAnimation);
 
-    // Use raf to stop any perceptible jumping in IE11
     window.requestAnimationFrame(() => {
       // Remove incoming animation classes
       incomingContentObject.$el.removeClass([
